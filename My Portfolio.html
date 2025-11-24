@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashwanth S | AI Systems Architect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-green': '#00FF41', /* Matrix Green */
+                        'void-black': '#050505',
+                        'surface': '#0F0F0F',
+                        'surface-card': '#111111',
+                        'border-dim': '#333333',
+                        // Badge Colors
+                        'badge-blue': '#3b82f6',
+                        'badge-orange': '#f97316',
+                        'badge-purple': '#a855f7',
+                        'badge-pink': '#ec4899',
+                        'badge-indigo': '#6366f1',
+                        'badge-teal': '#14b8a6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'scroll': 'scroll 40s linear infinite',
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            /* Deep Grid Background */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Navigation Active State */
+        .nav-btn.nav-active { 
+            color: #00FF41; 
+            text-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+            border-bottom: 2px solid #00FF41;
+        }
+
+        /* Watermark Icons in Arsenal */
+        .watermark-icon {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 180px;
+            color: rgba(255, 255, 255, 0.03);
+            transform: rotate(15deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Smooth Sections */
+        .page-section { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
+        .page-section.active { display: block; opacity: 1; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(5px); z-index: 100; display: none;
+            justify-content: center; align-items: center; padding: 1rem;
+        }
+        .modal-content {
+            background: #0A0A0A; border: 1px solid #333; width: 100%; max-width: 700px;
+            max-height: 90vh; overflow-y: auto; transform: scale(0.95); opacity: 0; transition: all 0.3s ease;
+        }
+        .modal-open .modal-content { transform: scale(1); opacity: 1; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #00FF41; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen font-sans selection:bg-neon-green selection:text-black flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 z-50 bg-void-black/95 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchPage('home')">
+                <div class="w-3 h-3 bg-neon-green rounded-full shadow-[0_0_10px_#00ff41]"></div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl tracking-tight text-white font-mono">ASHWANTH S</span>
+                    <span class="text-[10px] text-neon-green font-mono tracking-widest">SYSTEMS ARCHITECT</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-xs font-mono font-bold tracking-widest text-neutral-500">
+                <button onclick="switchPage('home')" id="nav-home" class="nav-btn py-6 hover:text-white transition-colors">/// HOME</button>
+                <button onclick="switchPage('work')" id="nav-work" class="nav-btn py-6 hover:text-white transition-colors">/// PROJECTS</button>
+                <button onclick="switchPage('arsenal')" id="nav-arsenal" class="nav-btn py-6 hover:text-white transition-colors">/// ARSENAL</button>
+                <button onclick="switchPage('journey')" id="nav-journey" class="nav-btn py-6 hover:text-white transition-colors">/// JOURNEY</button>
+            </div>
+
+            <a href="https://www.linkedin.com/in/ashwanthofficial/" target="_blank" class="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 hover:border-neon-green hover:text-neon-green px-4 py-2 rounded text-xs font-mono text-white transition-all">
+                <span>CONNECT</span>
+                <i class="fa-solid fa-arrow-right -rotate-45"></i>
+            </a>
+            
+             <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+         <div id="mobile-menu" class="hidden md:hidden bg-void-black border-b border-white/10 p-4 space-y-4 font-mono text-sm">
+            <button onclick="switchPage('home')" class="block w-full text-left text-neutral-400 hover:text-neon-green">/// HOME</button>
+            <button onclick="switchPage('work')" class="block w-full text-left text-neutral-400 hover:text-neon-green">/// PROJECTS</button>
+            <button onclick="switchPage('arsenal')" class="block w-full text-left text-neutral-400 hover:text-neon-green">/// ARSENAL</button>
+            <button onclick="switchPage('journey')" class="block w-full text-left text-neutral-400 hover:text-neon-green">/// JOURNEY</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow relative">
+
+        <!-- ==================== PAGE: HOME ==================== -->
+        <section id="home" class="page-section active max-w-7xl mx-auto px-6 py-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8 animate-fade-in">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-neon-green/10 border border-neon-green/20 rounded text-neon-green text-xs font-mono tracking-widest">
+                        <i class="fa-solid fa-circle text-[8px]"></i> OPERATIONAL STATUS: SCALING
+                    </div>
+
+                    <h1 class="text-5xl md:text-7xl font-bold text-white leading-[1.1] tracking-tight">
+                        I Architect <br>
+                        <span class="text-neon-green">The Invisible Machine.</span>
+                    </h1>
+
+                    <p class="text-lg text-neutral-400 leading-relaxed max-w-xl border-l-2 border-neon-green/30 pl-6">
+                        18 years old. Building revenue-generating infrastructure for Fortune 500s. 
+                        I don't just write scripts; I build <strong>autonomous business systems</strong> that run while you sleep.
+                    </p>
+
+                    <!-- Updated Buttons as requested -->
+                    <div class="flex flex-wrap gap-4 pt-6">
+                        <button onclick="switchPage('work')" class="bg-neon-green text-black font-bold font-mono px-8 py-4 rounded hover:bg-white transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                            VIEW SYSTEMS <i class="fa-solid fa-layer-group"></i>
+                        </button>
+                        <button onclick="switchPage('journey')" class="bg-transparent border border-white/30 text-white font-mono px-8 py-4 rounded hover:border-white hover:bg-white/5 transition-all">
+                            MY JOURNEY
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Terminal Visual -->
+                <div class="relative hidden md:block">
+                    <div class="relative bg-[#0e0e0e] border border-white/10 rounded-xl p-8 shadow-2xl font-mono text-sm">
+                        <div class="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
+                            <div class="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+                            <div class="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+                            <div class="ml-auto text-neutral-600">ashwanth_s@system-core:~</div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex gap-2"><span class="text-purple-400">const</span> <span class="text-blue-400">operator</span> = <span class="text-green-400">"Ashwanth S"</span>;</div>
+                            <div class="flex gap-2"><span class="text-purple-400">let</span> <span class="text-yellow-400">status</span> = <span class="text-orange-400">"Deploying Production Systems"</span>;</div>
+                            <br>
+                            <div class="text-neutral-500">// Initializing Core Protocols...</div>
+                            <div class="pl-4 border-l border-white/10 space-y-2">
+                                <div class="text-white">> Optimize_Revenue_Ops(Client="Fortune 500");</div>
+                                <div class="text-neon-green">  [SUCCESS] $2.4M Pipeline Activated</div>
+                                <div class="text-white">> Deploy_Agents(Type="Autonomous");</div>
+                                <div class="text-neon-green">  [SUCCESS] 85% Manual Work Eliminated</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="mt-32 border-y border-white/5 py-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl font-bold text-white mb-1">20+</div>
+                        <div class="text-xs font-mono text-neutral-500 tracking-widest">SYSTEMS DEPLOYED</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-white mb-1">85%</div>
+                        <div class="text-xs font-mono text-neutral-500 tracking-widest">OPS AUTOMATED</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-white mb-1">90%</div>
+                        <div class="text-xs font-mono text-neutral-500 tracking-widest">EFFICIENCY GAIN</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-white mb-1">18</div>
+                        <div class="text-xs font-mono text-neutral-500 tracking-widest">YEARS OLD</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE: PROJECTS (WORK) ==================== -->
+        <section id="work" class="page-section max-w-7xl mx-auto px-6 py-16">
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Production Deployments</h2>
+                <p class="text-neutral-400 max-w-2xl">Real systems running in the wild. No "Hello World" tutorials here. These are revenue-critical infrastructures.</p>
+            </div>
+
+            <!-- PROJECTS GRID (Populated by JS) -->
+            <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- ==================== PAGE: ARSENAL (STACK) ==================== -->
+        <section id="arsenal" class="page-section max-w-7xl mx-auto px-6 py-16">
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">The Arsenal</h2>
+                <p class="text-neutral-400 max-w-2xl">A curated stack of enterprise-grade tools. I don't use these to play; I use them to scale.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                
+                <!-- Orchestration Core -->
+                <div class="bg-surface-card border border-white/5 rounded-xl p-8 relative overflow-hidden min-h-[300px]">
+                    <i class="fa-solid fa-gears watermark-icon"></i>
+                    <h3 class="text-2xl font-bold text-white mb-8 relative z-10">Orchestration Core</h3>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-neon-green/50">
+                            <i class="fa-solid fa-bolt text-neon-green text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">N8N</div>
+                                <div class="text-[10px] text-neutral-500">Enterprise Workflows</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-purple-500/50">
+                            <i class="fa-solid fa-infinity text-purple-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Make.com</div>
+                                <div class="text-[10px] text-neutral-500">Rapid Integration</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-orange-500/50">
+                            <i class="fa-solid fa-code-branch text-orange-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Zapier</div>
+                                <div class="text-[10px] text-neutral-500">Standard Ops</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intelligence Layer -->
+                <div class="bg-surface-card border border-white/5 rounded-xl p-8 relative overflow-hidden min-h-[300px]">
+                    <i class="fa-solid fa-brain watermark-icon"></i>
+                    <h3 class="text-2xl font-bold text-white mb-8 relative z-10">Intelligence Layer</h3>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-green-500/50">
+                            <i class="fa-solid fa-microchip text-green-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">GPT-4o</div>
+                                <div class="text-[10px] text-neutral-500">Reasoning Engine</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-yellow-500/50">
+                            <i class="fa-solid fa-robot text-yellow-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Claude 3.5</div>
+                                <div class="text-[10px] text-neutral-500">Context Window</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-blue-500/50">
+                            <i class="fa-solid fa-magnifying-glass text-blue-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Perplexity</div>
+                                <div class="text-[10px] text-neutral-500">Live Search</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Engine -->
+                <div class="bg-surface-card border border-white/5 rounded-xl p-8 relative overflow-hidden min-h-[300px]">
+                    <i class="fa-solid fa-arrow-trend-up watermark-icon"></i>
+                    <h3 class="text-2xl font-bold text-white mb-8 relative z-10">Growth Engine</h3>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-red-500/50">
+                            <i class="fa-solid fa-bullseye text-red-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Apollo.io</div>
+                                <div class="text-[10px] text-neutral-500">B2B Data</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-teal-500/50">
+                            <i class="fa-solid fa-table text-teal-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Clay</div>
+                                <div class="text-[10px] text-neutral-500">Enrichment</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-indigo-500/50">
+                            <i class="fa-solid fa-phone text-indigo-400 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Retell AI</div>
+                                <div class="text-[10px] text-neutral-500">Voice Autonomy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Backbone -->
+                <div class="bg-surface-card border border-white/5 rounded-xl p-8 relative overflow-hidden min-h-[300px]">
+                    <i class="fa-solid fa-database watermark-icon"></i>
+                    <h3 class="text-2xl font-bold text-white mb-8 relative z-10">Data Backbone</h3>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-yellow-500/50">
+                            <i class="fa-solid fa-server text-yellow-500 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Airtable</div>
+                                <div class="text-[10px] text-neutral-500">Relational DB</div>
+                            </div>
+                        </div>
+                        <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-orange-500/50">
+                            <i class="fa-brands fa-hubspot text-orange-500 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">HubSpot</div>
+                                <div class="text-[10px] text-neutral-500">CRM Sync</div>
+                            </div>
+                        </div>
+                         <div class="bg-[#050505] border border-white/10 p-4 rounded flex items-center gap-3 transition-all hover:border-white/50">
+                            <i class="fa-solid fa-spider text-neutral-300 text-xl"></i>
+                            <div>
+                                <div class="text-white font-bold text-sm">Apify</div>
+                                <div class="text-[10px] text-neutral-500">Web Scraping</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- INFINITE MARQUEE -->
+            <div class="border-t border-white/10 pt-10 overflow-hidden relative">
+                <h3 class="text-sm font-mono text-neutral-500 mb-6 uppercase tracking-widest px-6">Complete Tooling Index</h3>
+                <div class="flex whitespace-nowrap overflow-hidden mask-fade">
+                    <div class="animate-scroll flex gap-4 pr-4">
+                        <!-- Repeated items for seamless loop -->
+                        <span class="tool-tag">Retell AI</span><span class="tool-tag">Chatling</span><span class="tool-tag">Cal.com</span>
+                        <span class="tool-tag">Apollo.io</span><span class="tool-tag">Clay</span><span class="tool-tag">Airtable</span>
+                        <span class="tool-tag">HubSpot</span><span class="tool-tag">Apify</span><span class="tool-tag">FireCrawl</span>
+                        <span class="tool-tag">Explorium</span><span class="tool-tag">LeadMagic</span><span class="tool-tag">Findymail</span>
+                        <span class="tool-tag">Anymail Finder</span><span class="tool-tag">Texau</span><span class="tool-tag">Beehiiv</span>
+                        <span class="tool-tag">Fireflies.ai</span><span class="tool-tag">Jira</span><span class="tool-tag">Slack</span>
+                        <span class="tool-tag">Kling AI</span><span class="tool-tag">Pika.art</span><span class="tool-tag">Suno.com</span>
+                        <span class="tool-tag">CapCut</span><span class="tool-tag">Hostinger</span><span class="tool-tag">Gamma.app</span>
+                         <!-- Duplicated for loop -->
+                        <span class="tool-tag">Retell AI</span><span class="tool-tag">Chatling</span><span class="tool-tag">Cal.com</span>
+                        <span class="tool-tag">Apollo.io</span><span class="tool-tag">Clay</span><span class="tool-tag">Airtable</span>
+                        <span class="tool-tag">HubSpot</span><span class="tool-tag">Apify</span><span class="tool-tag">FireCrawl</span>
+                        <span class="tool-tag">Explorium</span><span class="tool-tag">LeadMagic</span><span class="tool-tag">Findymail</span>
+                        <span class="tool-tag">Anymail Finder</span><span class="tool-tag">Texau</span><span class="tool-tag">Beehiiv</span>
+                        <span class="tool-tag">Fireflies.ai</span><span class="tool-tag">Jira</span><span class="tool-tag">Slack</span>
+                        <span class="tool-tag">Kling AI</span><span class="tool-tag">Pika.art</span><span class="tool-tag">Suno.com</span>
+                        <span class="tool-tag">CapCut</span><span class="tool-tag">Hostinger</span><span class="tool-tag">Gamma.app</span>
+                    </div>
+                </div>
+            </div>
+            
+            <style>
+                .tool-tag {
+                    display: inline-block; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1); 
+                    background: rgba(255,255,255,0.03); border-radius: 4px; font-family: monospace; font-size: 0.75rem; color: #9ca3af;
+                }
+                .mask-fade {
+                    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                }
+            </style>
+        </section>
+
+        <!-- ==================== PAGE: JOURNEY ==================== -->
+        <section id="journey" class="page-section max-w-4xl mx-auto px-6 py-12">
+            <div class="mb-16 text-center">
+                <h2 class="text-4xl font-bold text-white mb-4">The Evolution</h2>
+                <p class="text-neutral-400">From learning the ropes to architecting for Fortune 500s.</p>
+            </div>
+
+             <div class="relative space-y-12 pl-6 sm:pl-0">
+                <div class="hidden sm:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent -translate-x-1/2"></div>
+
+                <!-- Freedom -->
+                <div class="relative sm:flex sm:justify-between sm:items-center group">
+                    <div class="absolute left-[-29px] sm:left-1/2 sm:-translate-x-1/2 top-0 w-12 h-12 bg-[#0A0A0A] border border-white/20 rounded-full flex items-center justify-center text-white z-10 group-hover:border-neon-green group-hover:text-neon-green transition-all"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="sm:w-[45%] sm:text-right order-1">
+                        <div class="bg-surface border border-white/10 p-6 rounded-xl hover:border-white/30 transition-all">
+                             <div class="text-xs font-mono text-neutral-500 mb-1">FEB 2025 - JUNE 2025</div>
+                             <h3 class="text-xl font-bold text-white mb-2">Freedom With AI</h3>
+                             <div class="inline-block px-2 py-1 bg-white/5 rounded text-[10px] text-neutral-300 font-mono mb-4">INTERN</div>
+                             <p class="text-neutral-400 text-sm mb-4">Foundation layer. Managed 160+ members, researched AI tools, and built initial workflows.</p>
+                             <a href="https://www.instagram.com/meetavinash" target="_blank" class="text-xs font-mono text-neon-green hover:underline">VISIT FOUNDER -></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instig8 -->
+                <div class="relative sm:flex sm:justify-between sm:items-center group">
+                    <div class="absolute left-[-29px] sm:left-1/2 sm:-translate-x-1/2 top-0 w-12 h-12 bg-[#0A0A0A] border border-white/20 rounded-full flex items-center justify-center text-white z-10 group-hover:border-neon-green group-hover:text-neon-green transition-all"><i class="fa-solid fa-code"></i></div>
+                    <div class="hidden sm:block sm:w-[45%]"></div>
+                    <div class="sm:w-[45%] order-2">
+                        <div class="bg-surface border border-white/10 p-6 rounded-xl hover:border-white/30 transition-all">
+                             <div class="text-xs font-mono text-neutral-500 mb-1">MAY 2025 - PRESENT</div>
+                             <h3 class="text-xl font-bold text-white mb-2">Instig8.AI</h3>
+                             <div class="inline-block px-2 py-1 bg-blue-900/20 text-blue-400 rounded text-[10px] font-mono mb-4">AUTOMATION DEVELOPER</div>
+                             <p class="text-neutral-400 text-sm mb-4">The Build Phase. Building complex N8N systems for high-ticket B2B clients.</p>
+                             <a href="https://www.linkedin.com/in/aryanmahajaninstig8/" target="_blank" class="text-xs font-mono text-neon-green hover:underline">VISIT FOUNDER -></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zoro -->
+                <div class="relative sm:flex sm:justify-between sm:items-center group">
+                    <div class="absolute left-[-29px] sm:left-1/2 sm:-translate-x-1/2 top-0 w-12 h-12 bg-[#0A0A0A] border border-white/20 rounded-full flex items-center justify-center text-white z-10 group-hover:border-neon-green group-hover:text-neon-green transition-all"><i class="fa-solid fa-chess-queen"></i></div>
+                    <div class="sm:w-[45%] sm:text-right order-1">
+                        <div class="bg-surface border border-neon-green/30 p-6 rounded-xl hover:shadow-[0_0_20px_rgba(0,255,65,0.1)] transition-all">
+                             <div class="text-xs font-mono text-neon-green mb-1">PRESENT</div>
+                             <h3 class="text-xl font-bold text-white mb-2">Zoro Corp</h3>
+                             <div class="inline-block px-2 py-1 bg-neon-green/10 text-neon-green rounded text-[10px] font-mono mb-4">AI SYSTEMS ARCHITECT</div>
+                             <p class="text-neutral-400 text-sm mb-4">The Scale Phase. Architecting autonomous systems for Fortune 500s.</p>
+                             <a href="https://zorocorp.com/" target="_blank" class="text-xs font-mono text-neon-green hover:underline">VISIT HQ -></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content rounded-xl p-8" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+                <div>
+                    <div id="modal-client" class="text-xs font-mono text-neon-green mb-1">CLIENT NAME</div>
+                    <h2 id="modal-title" class="text-2xl font-bold text-white">Project Title</h2>
+                </div>
+                <button onclick="closeModalDirect()" class="text-neutral-500 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Problem Protocol</h4>
+                    <p id="modal-problem" class="text-neutral-400 text-sm leading-relaxed">Description of the problem.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">System Architecture</h4>
+                    <ul id="modal-solution" class="list-disc list-inside text-neutral-400 text-sm space-y-1">
+                        <li>Solution point 1</li>
+                    </ul>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-black/40 p-4 rounded border border-white/5">
+                        <h4 class="text-xs font-bold text-white mb-2 uppercase">Tech Stack</h4>
+                        <div id="modal-stack" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded border border-white/5">
+                        <h4 class="text-xs font-bold text-white mb-2 uppercase text-neon-green">Impact Metrics</h4>
+                        <ul id="modal-impact" class="text-xs text-neutral-300 space-y-2"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/10 bg-void-black py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">"Ready to Automate the Boring?"</h2>
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="https://www.linkedin.com/in/ashwanthofficial/" target="_blank" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-neon-green hover:text-black transition-all">
+                    <i class="fa-brands fa-linkedin-in text-xl"></i>
+                </a>
+                <a href="mailto:ashwanth2007@gmail.com" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-neon-green hover:text-black transition-all">
+                    <i class="fa-solid fa-envelope text-xl"></i>
+                </a>
+            </div>
+            <p class="text-[10px] text-neutral-600 font-mono tracking-widest">
+                ASHWANTH S © 2025 | SYSTEM STATUS: ONLINE
+            </p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // Project Data
+        const projects = [
+            {
+                id: 1,
+                client: "BCG / ZORO",
+                title: "BCG Executive System",
+                desc: "Architected an end-to-end intelligence system for a Boston Consulting Group partner. Scrapes global social signals, uses GPT-4 to filter for C-suite relevance.",
+                problem: "Partner spent hours manually researching prospects and creating content. Inconsistent pipeline.",
+                solution: ["Real-time scraping of linkedIn Thought Leaders", "AI C-suite relevance filtering (85% rejection rate)", "Context Profile System Training"],
+                stack: ["N8N", "GPT-4", "Apify", "FireCrawl"],
+                impact: "25-40 Qualified Leads/Month",
+                type: "ENTERPRISE INTELLIGENCE",
+                color: "badge-blue",
+                icon: "fa-solid fa-server"
+            },
+            {
+                id: 2,
+                client: "ONINDUS",
+                title: "Construction Intel Grid",
+                desc: "Real-time monitoring system detecting $50M+ construction projects. Automatically enriches leads with 90% validity and triggers multi-channel outreach.",
+                problem: "Manual tracking of $50M+ projects. Limited outreach scale (100 emails/day).",
+                solution: ["Automated detection of project signals", "90% valid lead enrichment", "Multi-channel HubSpot orchestration"],
+                stack: ["HubSpot API", "Clay", "N8N"],
+                impact: "50+ New Leads/Week",
+                type: "SIGNAL DETECTION",
+                color: "badge-orange",
+                icon: "fa-solid fa-tower-broadcast"
+            },
+            {
+                id: 3,
+                client: "TEKNOVA",
+                title: "Intelligent Lead Journey",
+                desc: "Automated qualification of 900+ biotech companies. AI matches products to therapeutic modality (Gene Therapy, etc.) using science-first reasoning.",
+                problem: "Manual qualification of 900+ biotech firms. Needed scientific product matching.",
+                solution: ["6-stage AI classification suite", "Therapeutic modality matching (Gene Therapy, etc.)", "Waterfall email recovery"],
+                stack: ["Clay", "GPT-4o", "Airtable"],
+                impact: "900+ Auto-Qualified",
+                type: "BIOTECH AUTOMATION",
+                color: "badge-purple",
+                icon: "fa-solid fa-dna"
+            },
+            {
+                id: 4,
+                client: "FALKEMEDIA",
+                title: "Recipe Automation Core",
+                desc: "End-to-end scraper for TikTok/Instagram recipes. Transcribes video, analyzes sentiment, and outputs structured English/German documentation.",
+                problem: "10+ hours/week manually finding air fryer recipes on TikTok. No sentiment analysis.",
+                solution: ["TikTok/IG Scraper via Apify", "Video Transcription & Sentiment Analysis", "Dual-language (EN/DE) Doc generation"],
+                stack: ["Make", "Apify", "OpenAI"],
+                impact: "10hrs -> 2hrs Workload",
+                type: "CONTENT OPS",
+                color: "badge-pink",
+                icon: "fa-solid fa-photo-film"
+            },
+            {
+                id: 5,
+                client: "NEFESH B'NEFESH",
+                title: "Semantic Lead Filtering",
+                desc: "Built for Nefesh B'nefesh to filter US immigration leads. Uses semantic scoring to distinguish 'Aliyah' (immigration) from people named 'Aliyah'.",
+                problem: "Keyword 'Aliyah' returned 80% false positives (people named Aliyah vs immigration).",
+                solution: ["GPT-4 Semantic Scoring (1-10 scale)", "US-wide geo-filtering", "12-month historical scrape"],
+                stack: ["LinkedIn API", "Semantic AI"],
+                impact: "False Positives < 10%",
+                type: "DATA MINING",
+                color: "badge-indigo",
+                icon: "fa-solid fa-database"
+            },
+            {
+                id: 6,
+                client: "BCG SERVICES",
+                title: "Autonomous Voice Responder",
+                desc: "Retell AI voice agent for insurance consultancy. Handles inbound leads, qualifies intent, and books discovery calls 24/7 without human intervention.",
+                problem: "Manual lead handling caused delays. Need 24/7 qualification.",
+                solution: ["Retell AI Voice Agent integration", "Real-time CRM sync", "Cal.com auto-booking"],
+                stack: ["Retell AI", "Cal.com", "Chatling"],
+                impact: "< 5 Min Response Time",
+                type: "VOICE AI",
+                color: "badge-teal",
+                icon: "fa-solid fa-microphone-lines"
+            },
+             {
+                id: 7,
+                client: "ZOEFOUNDRY",
+                title: "Warm Intro Outreach",
+                desc: "Systematic mapping of 1st-degree mutual connections for introductions. Automates the 'who do you know' process at scale.",
+                problem: "2+ hours per prospect to find mutual connections manually.",
+                solution: ["Automated 1st-degree mutual mapping", "Multi-stage intro sequence", "Webhook reply handling"],
+                stack: ["Apify", "Texau", "Airtable"],
+                impact: "83% Research Time Saved",
+                type: "NETWORK INTEL",
+                color: "badge-blue",
+                icon: "fa-solid fa-users-viewfinder"
+            },
+            {
+                id: 8,
+                client: "XPERTLINK",
+                title: "Content Strategy Engine",
+                desc: "Analyzed 1000+ industry articles to identify market gaps. Automatically generates SEO-optimized content calendars based on real data.",
+                problem: "Ad-hoc content planning. No data-driven topic selection.",
+                solution: ["Scraped 1000+ industry articles", "AI Pattern Analysis for trends", "SEO-optimized calendar generation"],
+                stack: ["Web Scraping", "AI Analysis", "N8N"],
+                impact: "Weeks -> Days Planning",
+                type: "STRATEGIC OPS",
+                color: "badge-orange",
+                icon: "fa-solid fa-chess"
+            },
+            {
+                id: 9,
+                client: "FORESIGHT",
+                title: "LinkedIn Content System",
+                desc: "Automated scraping of LinkedIn/YouTube. Generates 3 unique draft variants per topic and manages publishing via Kanban board.",
+                problem: "Inconsistent posting. 4-5 hours per post manual effort.",
+                solution: ["YouTube/LinkedIn scraping", "3-Variant AI Draft Gen", "Kanban Publishing Workflow"],
+                stack: ["Make", "GPT-4", "Slack"],
+                impact: "85% Time Reduction",
+                type: "CONTENT ENGINE",
+                color: "badge-purple",
+                icon: "fa-brands fa-linkedin"
+            },
+             {
+                id: 10,
+                client: "BIOTECH CLIENT",
+                title: "Patent Data Integration",
+                desc: "Automated retrieval and structuring of patent data. Links inventors, assignees, and claims into a unified relational database.",
+                problem: "Manual data entry for patents. Error-prone and slow.",
+                solution: ["Auto-retrieval via API", "Duplicate detection logic", "Linked Inventors/Assignees"],
+                stack: ["N8N", "Patent API", "Airtable"],
+                impact: "100% Data Integrity",
+                type: "DATA STRUCTURING",
+                color: "badge-teal",
+                icon: "fa-solid fa-file-contract"
+            },
+             {
+                id: 11,
+                client: "AMBROSIA",
+                title: "Zero-Code Email Ops",
+                desc: "Syncs Airtable segments to Beehiiv. Allows non-technical staff to run complex segmentation without touching the ESP.",
+                problem: "3-4 hours/week manual segmentation. Duplicate sends issues.",
+                solution: ["Airtable -> Beehiiv Sync", "Dynamic Segment Exclusion", "7-Segment Auto-Tagging"],
+                stack: ["Airtable", "Beehiiv", "Make"],
+                impact: "Zero Duplicate Sends",
+                type: "MARKETING OPS",
+                color: "badge-pink",
+                icon: "fa-solid fa-envelope"
+            },
+             {
+                id: 12,
+                client: "INVESTMATES",
+                title: "User Discovery Flow",
+                desc: "From Calendly booking to Jira ticket. Records calls, transcribes feedback, and auto-classifies into Bugs or Features.",
+                problem: "3-4 hours per call to schedule and transcribe feedback.",
+                solution: ["Calendly -> Fireflies -> GPT-4 Classification -> Jira Ticket"],
+                stack: ["Fireflies", "Jira", "Slack"],
+                impact: "100% Feedback Capture",
+                type: "PRODUCT OPS",
+                color: "badge-indigo",
+                icon: "fa-solid fa-user-group"
+            },
+             {
+                id: 13,
+                client: "BOOM / WISDOM",
+                title: "Viral Playbook Gen",
+                desc: "Analyzes viral content across 6 social platforms. Identifies patterns and generates niche-specific content playbooks.",
+                problem: "No systematic way to analyze viral content across 6 platforms.",
+                solution: ["Router-based N8N workflow", "Multi-platform sentiment analysis", "Viral pattern identification"],
+                stack: ["N8N Router", "Apify"],
+                impact: "6 Platforms Analyzed",
+                type: "VIRAL GROWTH",
+                color: "badge-orange",
+                icon: "fa-solid fa-fire"
+            },
+             {
+                id: 14,
+                client: "FREEDOM WITH AI",
+                title: "Diamond Member Track",
+                desc: "Progress tracking for 160+ students. Automated follow-ups and dashboards to ensure course completion.",
+                problem: "160+ members with no progress tracking system.",
+                solution: ["Fathom recording analysis", "3-Tier Follow-up Protocol", "Google Sheets Dashboard"],
+                stack: ["Google Sheets", "WhatsApp"],
+                impact: "60% Response Rate",
+                type: "COMMUNITY OPS",
+                color: "badge-blue",
+                icon: "fa-solid fa-users"
+            },
+             {
+                id: 15,
+                client: "FREEDOM WITH AI",
+                title: "Tech Support System",
+                desc: "3-tier escalation system for technical queries. reduced resolution time from days to hours.",
+                problem: "Daily technical issues blocking member progress.",
+                solution: ["3-Tier Escalation Hierarchy", "Query Categorization", "Knowledge Base Creation"],
+                stack: ["LMS", "Support Protocols"],
+                impact: "Same-Day Resolution",
+                type: "SUPPORT OPS",
+                color: "badge-teal",
+                icon: "fa-solid fa-headset"
+            },
+             {
+                id: 16,
+                client: "FREEDOM WITH AI",
+                title: "AI Tools Research",
+                desc: "Technical feasibility testing for emerging AI tools (Video, Music, Voice). Prevents wasted effort on unproven tech.",
+                problem: "Content team needed validation of emerging tools.",
+                solution: ["Tested Kling, Pika, Suno", "Technical Feasibility Reports", "Workaround Identification"],
+                stack: ["Kling AI", "Suno", "CapCut"],
+                impact: "Validated Tool Stack",
+                type: "R&D",
+                color: "badge-purple",
+                icon: "fa-solid fa-flask"
+            }
+        ];
+
+        // Render Projects
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = projects.map(p => {
+                // Create color classes dynamically
+                // Note: Tailwind classes must be full strings to be purged correctly, but we have defined specific custom colors in config.
+                // We use style attributes for dynamic colors to ensure they work without complex class mapping in vanilla JS
+                
+                // Map badge colors to specific styles if needed, or rely on the class map
+                return `
+                <div onclick="openModal(${p.id})" class="bg-[#111] border border-white/5 p-6 rounded-xl hover:border-white/20 transition-all group cursor-pointer h-full flex flex-col relative overflow-hidden">
+                   
+                   <div class="flex justify-between items-start mb-4 relative z-10">
+                      <span class="text-[10px] font-bold font-mono tracking-widest px-2 py-1 rounded border bg-${p.color}/10 text-${p.color} border-${p.color}/20" style="color: var(--color-${p.color}); border-color: var(--color-${p.color}); background-color: rgba(var(--color-${p.color}), 0.1);">${p.type}</span>
+                      <i class="${p.icon} text-neutral-600 group-hover:text-white transition-colors"></i>
+                   </div>
+                   
+                   <h3 class="text-xl font-bold text-white mb-2 group-hover:text-neon-green transition-colors relative z-10">${p.title}</h3>
+                   <p class="text-neutral-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow relative z-10">${p.desc}</p>
+                   
+                   <div class="space-y-3 mb-6 text-xs font-mono border-t border-white/5 pt-4 relative z-10">
+                      <div class="flex justify-between items-center">
+                         <span class="text-neutral-600 uppercase tracking-widest">Client</span>
+                         <span class="text-neutral-300 font-bold">${p.client}</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                         <span class="text-neutral-600 uppercase tracking-widest">Impact</span>
+                         <span class="text-neon-green font-bold">${p.impact}</span>
+                      </div>
+                   </div>
+                   
+                   <div class="flex flex-wrap gap-2 mt-auto relative z-10">
+                      ${p.stack.map(t => `<span class="text-[10px] bg-[#1A1A1A] px-2 py-1 rounded text-neutral-400 font-mono border border-white/5">${t}</span>`).join('')}
+                   </div>
+                </div>
+                `
+            }).join('');
+        }
+
+        // Modal Logic
+        function openModal(id) {
+            const p = projects.find(x => x.id === id);
+            if(!p) return;
+
+            document.getElementById('modal-client').innerText = p.client;
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-problem').innerText = p.problem;
+            
+            // Map solutions
+            document.getElementById('modal-solution').innerHTML = p.solution.map(s => `<li>${s}</li>`).join('');
+            
+            // Map stack
+            document.getElementById('modal-stack').innerHTML = p.stack.map(s => `<span class="text-xs bg-white/10 px-2 py-1 rounded text-neon-green font-mono border border-neon-green/20">${s}</span>`).join('');
+            
+            // Map impact
+            document.getElementById('modal-impact').innerHTML = `<li class="flex items-center gap-2"><i class="fa-solid fa-check text-neon-green"></i> ${p.impact}</li>`;
+
+            const modal = document.getElementById('project-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('modal-open'), 10);
+        }
+
+        function closeModal(e) {
+            if(e.target.id === 'project-modal') closeModalDirect();
+        }
+
+        function closeModalDirect() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('modal-open');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function switchPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+                setTimeout(() => { if(!sec.classList.contains('active')) sec.style.display = 'none'; }, 300);
+            });
+
+            const target = document.getElementById(pageId);
+            target.style.display = 'block';
+            setTimeout(() => target.classList.add('active'), 10);
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-active'));
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if(activeBtn) activeBtn.classList.add('nav-active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('nav-home').classList.add('nav-active');
+            renderProjects();
+        });
+    </script>
+</body>
+</html>
